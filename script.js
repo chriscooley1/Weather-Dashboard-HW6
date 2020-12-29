@@ -15,4 +15,30 @@ function makeHistory(){
         $("ul").addClass("list-group list-group-flush list");
 }
 
+    city = pastSearch[pastSearch.length-1]
+    getWeather(city);
+
+    $('#searchHistory').on('click', 'ul', function(){
+        var city = $(this).text();
+        getWeather(city);
+    });
+
+function getWeather(city){
+    const firstqueryUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + apiKey;
+    $.ajax({
+        url: firstqueryUrl,
+        method: "GET",
+        statusCode: {
+            404: function(){
+                $('#currentCity').hide();
+                $('#5dayForecast').hide();
+                $('#error404').show();
+                $('#forecastTitle').hide();
+                pastSearch.pop();
+                localStorage.setItem("Past Cities", JSON.stringify(pastSearch));
+                location.reload();
+            }
+        }
+    })
     
+}
